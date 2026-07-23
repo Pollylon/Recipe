@@ -1,15 +1,15 @@
 import { useState } from "react";
-
-export default function Card({ title }) {
-  console.log(title);
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import GradeIcon from '@mui/icons-material/Grade';
+export default function Card({ display, setDisplay , title }) {
 
   const [opened, setOpened] = useState();
-
+  const [page, setPage] = useState(10);
   return (
     <main className="recipes-container">
       {!opened ? (
         <section className="recipes-grid">
-          {title?.slice(0, 20).map((item) => (
+          {title?.slice(0, page).map((item) => (
             <article className="recipe-card" key={item.id}>
               <div className="recipe-card-header">
                 <h2>{item.title}</h2>
@@ -20,7 +20,8 @@ export default function Card({ title }) {
                 className="recipe-image"
                 src={`/${item.image_url}`}
                 alt={item.title}
-                onClick={() => setOpened(item)}
+                onClick={() =>{ setOpened(item)
+                   setDisplay(false)}}
               />
 
               <p className="recipe-description">
@@ -29,18 +30,29 @@ export default function Card({ title }) {
 
               <button
                 className="view-recipe-btn"
-                onClick={() => setOpened(item)}
+              
+                onClick={() =>{ setOpened(item)
+                   setDisplay(false)}}
               >
                 View Recipe
               </button>
+
+
             </article>
           ))}
+           <button
+            className="back-btn"
+            onClick={() => setPage(pre=>(pre+30))}
+          >
+        More...
+          </button>
         </section>
       ) : (
         <section className="recipe-details" key={opened.id}>
           <button
             className="back-btn"
-            onClick={() => setOpened(null)}
+            onClick={() => {setDisplay(true) 
+              setOpened(null)}}
           >
             ← Back
           </button>
@@ -49,13 +61,16 @@ export default function Card({ title }) {
             <div className="details-title">
               <h1>{opened.title}</h1>
               <h2>{opened.subtitle}</h2>
-              <h3>{opened.cuisine.value}</h3>
+              <h3>{opened.country.name}</h3>
+            <img  style={{width: "30px" , height : "25px"}}src={opened.country.flag_image_url} alt="a"/>
+
             </div>
 
             <img
               src={`/${opened.image_url}`}
               alt={opened.title}
-              onClick={() => setOpened(null)}
+              onClick={() =>{setDisplay(true) 
+              setOpened(null)}}
               className="details-image"
             />
           </div>
@@ -90,26 +105,57 @@ export default function Card({ title }) {
                   </li>
                 ))}
               </ol>
+            </div>calories
+            <div className="info-card">
+              <h3>nutrition</h3>
+
+              <ol className="instructions">
+               
+                  <li >
+                  Calories    { opened.nutrition.calories} CL
+                  </li>
+                  
+                  <li >
+                  Carbs    { opened.nutrition.carbs_g} g
+                  </li>
+                  
+                  <li >
+                  Estimated   { opened.nutrition.estimated} g
+                  </li>
+                  
+                  <li >
+                  Fat      { opened.nutrition.fat_g} g
+                  </li>
+                  
+                  <li >
+                  Protein{ opened.nutrition.protein_g} g
+                  </li>
+                
+                
+              </ol>
             </div>
 
             <div className="recipe-stats">
               <div className="stat-card">
-                <span>Rating</span>
+                <span>Rating </span>
                 <strong>
                   {opened.rating.value}/{opened.rating.out_of}
+                  <image  ><GradeIcon/></image>
                 </strong>
               </div>
 
               <div className="stat-card">
-                <span>Cooking Time</span>
+                <span>Cooking Time </span>
                 <strong>
-                  {opened.time_cook.minutes} min
+                  {opened.time_cook.minutes } min  
+                  <image  ><AccessAlarmsIcon/></image>
                 </strong>
               </div>
             </div>
           </div>
         </section>
       )}
+     
     </main>
   );
 }

@@ -1,18 +1,21 @@
 
-import ingredients from"./recipes-real-3000-enriched (1).json"
-import mockData from "./recipes-mock-3000 (1).json"
-import { useEffect , useState } from "react"
-import Card from "./card"
-
+import ingredients from"./recipes-real-3000-v2 (1).json"
+import { useMemo , useState } from "react"
+import Filter from "./filter";
 
 export default function Data(){
-    const [data , setData ] = useState()
-      useEffect(()=>{
+    const [data , setData ] = useState("")
+    const [display , setDisplay] = useState(true)
+      useMemo(()=>{
    setData(ingredients)
+  
       },[])
       return(
-        <div>
-            <Card title={data}/>
+    <div >  
+           <Filter display={display} 
+           setDisplay={setDisplay} 
+                      data={data}/>
+          
         </div>
       )
 }
